@@ -1,10 +1,8 @@
-
 import re
 import time
-import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-
 
 # droplink url
 url = ""
@@ -12,12 +10,12 @@ url = ""
 # ==============================================
     
 def droplink_bypass(url):
-    client = requests.Session()
+    DOMAIN = 'https://yoshare.net'
+    link = link.replace("droplink.com", "droplink.co")
+    client = cloudscraper.create_scraper(interpreter='nodejs', allow_brotli=False)
     res = client.get(url)
 
-    ref = re.findall("action[ ]{0,}=[ ]{0,}['|\"](.*?)['|\"]", res.text)[0]
-
-    h = {'referer': ref}
+    h = {'referer': DOMAIN}
     res = client.get(url, headers=h)
 
     bs4 = BeautifulSoup(res.content, 'lxml')
@@ -34,7 +32,7 @@ def droplink_bypass(url):
     time.sleep(3.1)
     res = client.post(final_url, data=data, headers=h).json()
 
-    return res
+    return res["url"]
 
 # ==============================================
 
